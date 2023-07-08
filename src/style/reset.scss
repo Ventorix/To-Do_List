@@ -8,14 +8,14 @@ body {
   background: $sky;
   transition: background-color 0.2s linear;
   display: grid;
+  color: #000;
   place-items: center;
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-size: 16px;
   font-weight: 500;
   margin-bottom: 80px;
   padding: 0;
   overflow-x: hidden;
-  color: $white;
 }
 
 h1,

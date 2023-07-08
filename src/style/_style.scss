@@ -1,4 +1,5 @@
 /* HEADER */
+
 .header {
   width: 100%;
   display: flex;
@@ -8,7 +9,12 @@
   font-size: 2.5rem;
   padding: 10px 20px;
   font-weight: 900;
-  border-bottom: solid 2px $dark-green;
+  border-bottom: solid 2px $lighten-green;
+
+  &.dark {
+    background-color: $secondary;
+    transition: background-color 0.2s linear;
+  }
 
   &-center {
     display: flex;
@@ -24,6 +30,7 @@
     &__title {
       font-size: 2.5rem;
       font-weight: 900;
+      color: $white;
 
       &-accent {
         color: $lighten-green;
@@ -34,11 +41,14 @@
   &-menu {
     height: 40px;
     width: 40px;
+    background-color: $white;
+    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
     display: flex;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     padding: 10px;
+    border: 1px solid $grey;
     border-radius: 4px;
     user-select: none;
 
@@ -46,7 +56,7 @@
     &__icon::before,
     &__icon::after {
       display: block;
-      background-color: $white;
+      background-color: $sky;
       position: absolute;
       height: 4px;
       width: 30px;
@@ -55,12 +65,12 @@
     }
 
     &__icon::before {
-      content: "";
+      content: '';
       margin-top: -8px;
     }
 
     &__icon::after {
-      content: "";
+      content: '';
       margin-top: 8px;
     }
 
@@ -94,6 +104,11 @@
     &__switch {
       opacity: 0;
       position: absolute;
+
+      &.dark {
+        transform: translate(30px);
+        transition: transform 0.2s linear;
+      }
     }
 
     &__label {
@@ -108,7 +123,7 @@
       box-sizing: border-box;
       position: relative;
       transition: background-color 0.2s ease-in;
-      border: solid 3px $dark-green;
+      border: solid 3px $lighten-green;
       cursor: pointer;
     }
 
@@ -126,9 +141,16 @@
       position: absolute;
       width: 28px;
       height: 28px;
+      left: 8px;
       background-color: $lighten-green;
       border-radius: 50%;
       transition: transform 0.2s linear;
+
+      &.dark {
+        background-color: $lighten-green;
+        transform: translate(30px);
+        transition: transform 0.2s linear;
+      }
     }
   }
 }
@@ -138,14 +160,154 @@
   transition: background-color 0.2s linear;
 }
 
-.dark-header {
-  background-color: $secondary;
-  transition: background-color 0.2s linear;
+/* MAIN */
+
+.main {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+
+  &-sidebar {
+    display: none;
+    flex-direction: column;
+    padding: 20px;
+    flex-shrink: 2;
+    flex-basis: 20em;
+    background-color: $white;
+    box-shadow: 0px 5px 10px 2px rgba(34, 60, 80, 0.2) inset;
+
+    &.open {
+      display: flex;
+    }
+
+    &.dark {
+      color: $white;
+      background-color: $mid-dark;
+
+      .main-sidebar__subtitle {
+        color: $white;
+        border-bottom: $lighten-green 2px solid;
+      }
+
+      .main-sidebar__button {
+        color: $white;
+      }
+    }
+
+    &__subtitle {
+      font-size: 1.5em;
+      font-weight: 600;
+      line-height: 10px;
+      text-align: left;
+      color: $secondary;
+      border-bottom: $secondary 2px solid;
+      padding: 0 0 15px;
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }
+
+    &__list {
+      display: flex;
+      flex-direction: column;
+
+      &-elem {
+        margin-bottom: 10px;
+        padding: 5px;
+        gap: 15px;
+        display: flex;
+        border-radius: 6px;
+        border: solid 2px transparent;
+        background: transparent;
+        cursor: pointer;
+        user-select: none;
+
+        &:hover {
+          background-color: rgba(128, 128, 128, 0.219);
+        }
+
+        &.selected {
+          border-left: solid 3px $lighten-green !important;
+          background-color: #2abd6770;
+        }
+
+        &__project {
+          display: flex;
+          justify-content: space-between;
+
+          &-img {
+            width: 28px;
+            height: 28px;
+          }
+
+          &-text {
+          }
+
+          &-functions {
+            &__img {
+              width: 34px;
+              height: 34px;
+              border-radius: 6px;
+              border: solid 3px transparent;
+              background: transparent;
+              &:hover {
+                background-color: $white;
+              }
+            }
+          }
+        }
+
+        &__img {
+          width: 28px;
+          height: 28px;
+        }
+
+        &__text {
+          font-size: 1rem;
+          font-weight: 500;
+          display: inline-block;
+          vertical-align: middle;
+        }
+      }
+    }
+
+    &__button {
+      margin-bottom: 10px;
+      padding: 5px;
+      display: flex;
+      align-items: flex-start;
+      border-radius: 6px;
+      color: $secondary;
+      border: solid 2px transparent;
+      background: transparent;
+      cursor: pointer;
+      user-select: none;
+      font-weight: 600;
+      font-size: 1.25rem;
+
+      &:hover {
+        background-color: rgba(128, 128, 128, 0.219);
+      }
+
+      &-img {
+        width: 28px;
+        height: 28px;
+        margin-right: 10px;
+        margin-left: 10px;
+      }
+    }
+  }
+
+  &-tasks {
+    flex-grow: 1;
+    flex-basis: 20em;
+    background-color: $blue;
+
+    &.dark {
+      background-color: $lighten-dark;
+    }
+  }
 }
-.dark-active {
-  transform: translate(30px);
-  transition: transform 0.2s linear;
-}
+
 /* FOOTER */
 
 .footer {

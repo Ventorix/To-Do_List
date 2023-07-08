@@ -5,27 +5,39 @@ const modeToggle = document.getElementById('header-mode__switch');
 const marker = document.querySelector('.header-mode__marker');
 const label = document.querySelector('.header-mode__label');
 const header = document.querySelector('.header');
-const sidebarMenu = document.querySelector('.header-menu');
+const sidebarMenuBtn = document.querySelector('.header-menu');
+const sidebarMenu = document.querySelector('.main-sidebar');
+const mainBlock = document.querySelector('.main-tasks');
+const menuElems = document.querySelectorAll('.main-sidebar__list-elem');
 
-sidebarMenu.addEventListener('click', openMenu);
+sidebarMenuBtn.addEventListener('click', openMenu);
 modeToggle.addEventListener('change', toggleColorMode);
-window.addEventListener('load', setupTheme);
+menuElems.forEach((elem) => elem.addEventListener('click', (e) => activeTile(e)));
 
 let themeState;
 
+function activeTile(e) {
+  if (!e.target.classList.contains('selected')) {
+    menuElems.forEach((elem) => elem.classList.remove('selected'));
+    e.currentTarget.classList.add('selected');
+  }
+}
+
 function openMenu() {
+  sidebarMenuBtn.classList.toggle('open');
   sidebarMenu.classList.toggle('open');
 }
 
 function toggleColorMode() {
-  header.classList.toggle('dark-header');
-  document.body.classList.toggle('dark');
-  label.classList.toggle('dark');
-  modeToggle.classList.toggle('dark-active');
-  marker.classList.toggle('dark-active');
+  header.classList.toggle('dark');
   sidebarMenu.classList.toggle('dark');
+  mainBlock.classList.toggle('dark');
+  label.classList.toggle('dark');
+  modeToggle.classList.toggle('dark');
+  marker.classList.toggle('dark');
+  sidebarMenuBtn.classList.toggle('dark');
 
-  if (document.body.classList.contains('dark')) {
+  if (header.classList.contains('dark')) {
     themeState = 'dark';
     saveTheme();
   } else {
@@ -42,12 +54,13 @@ function setupTheme() {
   if (storageTheme) {
     themeState = storageTheme;
     if (themeState === 'dark') {
-      header.classList.add('dark-header');
-      document.body.classList.add('dark');
-      sidebarMenu.classList.add('dark');
+      header.classList.add('dark');
+      sidebarMenuBtn.classList.add('dark');
+      sidebarMenu.classList.toggle('dark');
+      mainBlock.classList.toggle('dark');
       label.classList.toggle('dark');
-      modeToggle.classList.add('dark-active');
-      marker.classList.add('dark-active');
+      modeToggle.classList.add('dark');
+      marker.classList.add('dark');
     }
   }
 }
@@ -55,3 +68,5 @@ function setupTheme() {
 function saveTheme() {
   localStorage.setItem('themeState', themeState);
 }
+
+setupTheme();
