@@ -1,0 +1,143 @@
+import { toggleColorMode } from './darkTheme';
+
+const projectForm = document.querySelector('.project-form');
+const sidebarMenuBtn = document.querySelector('.header-menu');
+const sidebarMenu = document.querySelector('.sidebar');
+
+let defaultId = 0;
+let id = Number(localStorage.getItem('currentId')) || defaultId;
+
+function createEventListener() {
+  sidebarMenuBtn.addEventListener('click', openMenu);
+
+  const themeSwitch = document.getElementById('header-mode__switch');
+  themeSwitch.addEventListener('click', toggleColorMode);
+
+  const projectsList = document.querySelectorAll('.sidebar__list');
+  projectsList.forEach((elem) => elem.addEventListener('click', (e) => activeTile(e)));
+
+  const createProjectBtn = document.querySelector('.sidebar__button');
+  createProjectBtn.addEventListener('click', showCreateForm);
+
+  const addBtn = document.querySelector('.project-form__buttons-add');
+  addBtn.addEventListener('click', processProjectInput);
+
+  const cancelBtn = document.querySelector('.project-form__buttons-cancel');
+  cancelBtn.addEventListener('click', closeCreateForm);
+}
+
+function openMenu() {
+  sidebarMenuBtn.classList.toggle('open');
+  sidebarMenu.classList.toggle('open');
+}
+
+function showCreateForm() {
+  projectForm.classList.add('open');
+  document.querySelector('#projectInput').focus();
+}
+
+function closeCreateForm() {
+  projectForm.classList.remove('open');
+  let projectInput = document.getElementById('projectInput');
+  projectInput.value = '';
+}
+
+function activeTile(e) {
+  if (e.target.tagName !== 'UL') {
+    if (e.target.closest('.tile') != null) {
+      let projectTile = e.target.closest('.tile');
+      const selectedTile = document.querySelector('.selected');
+      selectedTile.classList.remove('selected'); //remove class selected from previous tile
+      projectTile.classList.add('selected'); //add class selected to current tile
+    }
+  }
+}
+
+const findNextProject = () => {
+  const projects = document.querySelectorAll('[data-project]');
+  return projects.length;
+};
+
+let defaultProjectList = [];
+let projectList = localStorage.getItem('myProjectList');
+projectList = JSON.parse(projectList || JSON.stringify(defaultProjectList));
+renderProjects(projectList);
+
+function renderProjects(projects) {
+  projects.forEach((project) => {
+    addProject(project.dataProject, project.name);
+  });
+}
+
+const processProjectInput = (e) => {
+  let projectName = document.getElementById('projectInput').value;
+  let dataProject = findNextProject();
+  const newProject = CreateProject(dataProject, projectName);
+
+  projectList.push(newProject);
+  saveProject();
+
+  addProject(dataProject, projectName);
+  closeCreateForm();
+  e.preventDefault();
+};
+
+function addProject(dataProject, textInput) {
+  const projectsList = document.querySelector('#projectsList');
+
+  const container = document.createElement('li');
+  container.setAttribute('data-project', `${dataProject}`);
+  container.classList.add('tile');
+  container.classList.add('project');
+  projectsList.appendChild(container);
+
+  //project icon
+  const projectIcon = createIcon('assets/archive.svg');
+  container.appendChild(projectIcon);
+
+  //project name
+  const projectName = document.createElement('p');
+  projectName.classList.add('tile__text');
+  projectName.textContent = textInput;
+  container.appendChild(projectName);
+
+  //project functions block
+  const projectFunctions = document.createElement('div');
+  projectFunctions.classList.add('tile-functions');
+  container.appendChild(projectFunctions);
+
+  //edit icon
+  const editIcon = createIcon('assets/edit.svg');
+  editIcon.classList.add('function-img');
+  projectFunctions.appendChild(editIcon);
+
+  //delete icon
+  const deleteIcon = createIcon('assets/delete.svg');
+  deleteIcon.classList.add('function-img');
+  projectFunctions.appendChild(deleteIcon);
+}
+
+function createIcon(source) {
+  const icon = document.createElement('img');
+  icon.src = source;
+  icon.classList.add('tile__img');
+  return icon;
+}
+
+function saveProject() {
+  localStorage.setItem('myProjectList', JSON.stringify(projectList));
+  localStorage.setItem('currentId', id.toString());
+}
+
+const CreateProject = (dataProject, name) => {
+  const taskList = [];
+  const taskNum = taskList.length;
+  return {
+    dataProject,
+    name,
+    taskList,
+    taskNum,
+  };
+};
+
+export { createEventListener };
